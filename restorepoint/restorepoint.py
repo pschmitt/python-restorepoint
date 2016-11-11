@@ -6,6 +6,7 @@ https://restorepoint.freshdesk.com/support/solutions/articles/9000098438-api-doc
 '''
 
 from __future__ import unicode_literals
+import copy
 import requests
 import logging
 import time
@@ -160,17 +161,43 @@ class RestorePoint(object):
         data = {'msg': 'backupdevices', 'params': {'ids': target_device_ids}}
         return self.__request(data=data)
 
-    def backup_device_wait(self, device_id):
+    def backup_device_block(self, device_id):
         backup_action = self.backup_devices(device_id)
         logger.info('Backup action: {}'.format(backup_action))
-        time.sleep(2)
-        status = self.list_device_status(device_id)['State']
-        print(status)
-        while status != 'Idle':
-            logger.info('Device Status: {}'.format(status))
-            print(status)
-            status = self.list_device_status(device_id)['State']
+        device = self.get_device(device_id)
+        while device['State'] != 'Idle':
+            device = self.get_device(device_id)
+            logger.info('Device Status: {}'.format(device['State']))
             time.sleep(2)
+        return device['BackupStatus']
+
+    def backup_devices_block(self, device_ids):
+        backup_action = self.backup_devices(device_ids)
+        logger.info('Backup action: {}'.format(backup_action))
+
+        result = {}
+        devices = copy.deepcopy(device_ids)
+        while devices:
+            for dev_id in devices:
+                dev_info = self.get_device(dev_id)
+                if dev_info['State'] == 'Idle':
+                    devices.remove(dev_id)
+                    result[dev_id] = dev_info['BackupStatus']
+            logger.info(
+                'Remaining devices: {}/{}'.format(
+                    len(devices), len(device_ids)
+                )
+            )
+            time.sleep(1)
+        return result
+
+        # device = self.get_device(device_id)
+        # while device['State'] != 'Idle':
+        #     device = self.get_device(device_id)
+        #     logger.info('Device Status: {}'.format(device['State']))
+        #     time.sleep(2)
+        # return device['BackupStatus']
+
 
     def latest_backups(self, device_ids=[]):
         return self.__rq(
@@ -187,6 +214,10 @@ class RestorePoint(object):
     def backup_all_devices(self):
         device_ids = self.__get_all_device_ids()
         return self.backup_devices(device_ids)
+
+    def backup_all_devices_block(self):
+        device_ids = self.__get_all_device_ids()
+        return self.backup_devices_block(device_ids)
 
     def list_failed_backups(self):
         return [x for x in self.list_devices_status() if not x['BackupStatus']]
