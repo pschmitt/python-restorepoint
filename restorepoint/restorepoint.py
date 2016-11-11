@@ -75,6 +75,9 @@ class RestorePoint(object):
         if res:
             return res[0]
 
+    def list_backups(self, device_id):
+        return self.__list('backups')
+
     def list_plugins(self):
         return self.__list('plugins')
 

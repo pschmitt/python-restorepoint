@@ -1,2 +1,4 @@
 .ropeproject/
 *.pyc
+dist/
+*.egg-info/
