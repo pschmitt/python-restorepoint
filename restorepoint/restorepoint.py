@@ -12,8 +12,12 @@ import logging
 import time
 
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
+
+# Silence requests warnings
+requests.packages.urllib3.disable_warnings()
+logging.getLogger('requests').setLevel(logging.WARNING)
 
 
 class RestorePoint(object):
@@ -161,17 +165,17 @@ class RestorePoint(object):
         data = {'msg': 'backupdevices', 'params': {'ids': target_device_ids}}
         return self.__request(data=data)
 
-    def backup_device_block(self, device_id):
+    def backup_device_block(self, device_id, sleep_interval):
         backup_action = self.backup_devices(device_id)
         logger.info('Backup action: {}'.format(backup_action))
         device = self.get_device(device_id)
         while device['State'] != 'Idle':
             device = self.get_device(device_id)
             logger.info('Device Status: {}'.format(device['State']))
-            time.sleep(2)
+            time.sleep(sleep_interval)
         return device['BackupStatus']
 
-    def backup_devices_block(self, device_ids):
+    def backup_devices_block(self, device_ids, sleep_interval=2):
         backup_action = self.backup_devices(device_ids)
         logger.info('Backup action: {}'.format(backup_action))
 
@@ -188,16 +192,8 @@ class RestorePoint(object):
                     len(devices), len(device_ids)
                 )
             )
-            time.sleep(1)
+            time.sleep(sleep_interval)
         return result
-
-        # device = self.get_device(device_id)
-        # while device['State'] != 'Idle':
-        #     device = self.get_device(device_id)
-        #     logger.info('Device Status: {}'.format(device['State']))
-        #     time.sleep(2)
-        # return device['BackupStatus']
-
 
     def latest_backups(self, device_ids=[]):
         return self.__rq(
