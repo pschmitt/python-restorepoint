@@ -41,7 +41,19 @@ def parse_args():
         help='Skip SSL cert verification',
         default=False
     )
-    parser.add_argument(
+    subparsers = parser.add_subparsers(
+        dest='action',
+        help='Available commands'
+    )
+    subparsers.add_parser(
+        'list',
+        help='List devices'
+    )
+    backup_parser = subparsers.add_parser(
+        'backup',
+        help='Backup one or more devices'
+    )
+    backup_parser.add_argument(
         'DEVICE',
         default='all',
         nargs='*',
@@ -58,30 +70,38 @@ def main():
         password=args.password,
         verify=not args.insecure
     )
-    if args.DEVICE == 'all':
-        res = rp.backup_all_devices_block()
-    else:
-        # Determine the device IDs
-        device_ids = []
-        for dev in args.DEVICE:
-            dev_id = rp.get_device_id_from_name(dev)
-            if not dev_id:
-                logger.error('Could not determine device ID of device {}'.format(dev))
-            else:
-                device_ids.append(dev_id)
-        # Backup the devices whose IDs could be determined
-        res = rp.backup_devices_block(device_ids)
-    # Print results
-    for dev_id, backup_result in res.iteritems():
-        dev_name = rp.get_device(dev_id)['Name']
-        print(
-            '{}: {}'.format(
-                dev_name,
-                'Backup succeeded ✓' if backup_result else 'Backup failed! ✗'
-            )
+    if args.action == 'list':
+        device_names = sorted(
+            [x['Name'] for x in rp.list_devices()],
+            key=lambda s: s.lower()
         )
-    # Set the exit code to 1 if at least one backup failed
-    sys.exit(0 if all(res.values()) else 1)
+        for dev in device_names:
+            print(dev)
+    elif args.action == 'backup':
+        if args.DEVICE == 'all':
+            res = rp.backup_all_devices_block()
+        else:
+            # Determine the device IDs
+            device_ids = []
+            for dev in args.DEVICE:
+                dev_id = rp.get_device_id_from_name(dev)
+                if not dev_id:
+                    logger.error('Could not determine device ID of device {}'.format(dev))
+                else:
+                    device_ids.append(dev_id)
+            # Backup the devices whose IDs could be determined
+            res = rp.backup_devices_block(device_ids)
+        # Print results
+        for dev_id, backup_result in res.iteritems():
+            dev_name = rp.get_device(dev_id)['Name']
+            print(
+                '{}: {}'.format(
+                    dev_name,
+                    'Backup succeeded ✓' if backup_result else 'Backup failed! ✗'
+                )
+            )
+        # Set the exit code to 1 if at least one backup failed
+        sys.exit(0 if all(res.values()) else 1)
 
 
 if __name__ == '__main__':
