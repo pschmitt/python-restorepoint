@@ -6,13 +6,20 @@ https://restorepoint.freshdesk.com/support/solutions/articles/9000098438-api-doc
 '''
 
 from __future__ import unicode_literals
+import pathos.multiprocessing as mp
+import cgi
 import copy
-import requests
+import functools
+import json
 import logging
+import os
+import requests
 import time
+import urllib
 
 
 logging.basicConfig(level=logging.WARNING)
+# logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # Silence requests warnings
@@ -82,6 +89,12 @@ class RestorePoint(object):
 
     def list_backups(self, device_id):
         return self.__list('backups')
+
+    def list_device_backups(self, device_id):
+        return self.__rq(
+            msg='devicebackups',
+            params={'device': {'id': device_id}}
+        )
 
     def list_plugins(self):
         return self.__list('plugins')
@@ -195,7 +208,7 @@ class RestorePoint(object):
             time.sleep(sleep_interval)
         return result
 
-    def latest_backups(self, device_ids=[]):
+    def latest_backups(self, device_ids):
         return self.__rq(
             msg='latestbackups',
             params={'ids': device_ids}
@@ -217,3 +230,76 @@ class RestorePoint(object):
 
     def list_failed_backups(self):
         return [x for x in self.list_devices_status() if not x['BackupStatus']]
+
+    def export_backup(self, backup_id, dest_dir=None, chunk_size=2000):
+        data = {
+            'msg': 'exportbackup',
+            'params': {
+                'ids': [backup_id],
+                'command': 'Browser',
+                'configtype': '',
+                'credentials': {'password': '', 'username': ''},
+                'isdownload': True,
+                'location': '',
+                'value': ''
+            }
+        }
+        url = '{}/data?data={}'.format(
+            self.API,
+            urllib.quote(json.dumps(data), safe='{}:,[]')
+        )
+        logger.info('GET Data: {}'.format(data))
+
+        r = requests.get(
+            url=url,
+            cookies=self._cookies,
+            verify=self.verify,
+            stream=True
+        )
+        filename = cgi.parse_header(r.headers['Content-Disposition'])[1]['filename']
+        filepath = os.path.join(dest_dir if dest_dir else os.getcwd(), filename)
+        logger.info('Export backup {} to {}'.format(backup_id, filepath))
+
+        r.raise_for_status()
+        with open(filepath, 'wb') as f:
+            # r.raw.decode_content = True
+            # shutil.copyfileobj(r.raw, f)
+            for chunk in r.iter_content(chunk_size):
+                f.write(chunk)
+        return backup_id, filepath
+
+    def export_latest_backups(self, device_ids, dest_dir=None):
+        latest_backups = [b['ID'] for b in self.latest_backups(device_ids)]
+        pool = mp.ProcessingPool()
+        func = functools.partial(self.export_backup, dest_dir=dest_dir)
+        res = pool.amap(func, latest_backups)
+        while not res.ready():
+            logger.info(
+                'Remaining: {}/{}'.format(
+                    len(latest_backups) - res._number_left,
+                    len(latest_backups)
+                )
+            )
+            time.sleep(1)
+        return res.get()
+
+        # exports = []
+        # for b in latest_backups:
+        #     logger.info(
+        #         'Process backup {}. Progress: {}/{}'.format(
+        #             b,
+        #             latest_backups.index(b) + 1,
+        #             len(latest_backups)
+        #         )
+        #     )
+        #     exports.append(
+        #         {
+        #             'Backup ID': b,
+        #             'Result': self.export_backup(b, dest_dir)
+        #         }
+        #     )
+        # return exports
+
+    def export_all_latest_backups(self, dest_dir=None):
+        device_ids = self.__get_all_device_ids()
+        return self.export_latest_backups(device_ids, dest_dir)
