@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# coding: utf-8
-
+# -*- coding: utf-8 -*-
 
 from __future__ import print_function
 from __future__ import unicode_literals
@@ -125,7 +124,7 @@ def display_backup_results(rp, result):
         print(
             '{}: {}'.format(
                 dev_name,
-                'Backup succeeded ✓' if backup_result else 'Backup failed! ✗'
+                'Backup succeeded' if backup_result else 'Backup failed!'
             )
         )
 
@@ -141,7 +140,7 @@ def display_export_results(rp, res):
         print(
             '{}: {}'.format(
                 dev_name,
-                'Export succeeded ✓' if backup_result else 'Export failed! ✗'
+                'Export succeeded' if backup_result else 'Export failed!'
             )
         )
 
