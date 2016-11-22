@@ -7,6 +7,8 @@ from __future__ import unicode_literals
 from restorepoint import RestorePoint
 import argparse
 import logging
+import os
+import shutil
 import sys
 
 
@@ -78,12 +80,31 @@ def parse_args():
         default=False
     )
     export_parser.add_argument(
+        '-c',
+        '--clean',
+        help='Empty destination dir if set',
+        action='store_true',
+        default=False
+    )
+    export_parser.add_argument(
         'DEVICE',
         default='all',
         nargs='*',
         help='Optinal device name to export (Default: all)'
     )
     return parser.parse_args()
+
+
+def empty_dir(directory):
+    for f in os.listdir(directory):
+        file_path = os.path.join(directory, f)
+        try:
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            logger.error(e)
 
 
 def determine_device_ids(rp, device_names):
@@ -154,6 +175,16 @@ def main():
         # Set the exit code to 1 if at least one backup failed
         exit_code = 0 if all(res.values()) else 1
     elif args.action == 'export':
+        # Clean/empty the destination dir if requested
+        if args.clean and args.destination is None:
+            print(
+                'You need to set the destination dir when --clean is set',
+                file=sys.stderr
+            )
+            sys.exit(3)
+        elif args.clean:
+            empty_dir(args.destination)
+        # Export backups
         if args.DEVICE == ['all']:
             if args.force_backup:
                 backup_res = rp.backup_all_devices_block()
