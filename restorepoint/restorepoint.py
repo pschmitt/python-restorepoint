@@ -156,7 +156,7 @@ class RestorePoint(object):
             params={'value': password}
         )
 
-    def __get_all_device_ids(self):
+    def get_all_device_ids(self):
         return [x['ID'] for x in self.list_devices()]
 
     def get_device_id_from_name(self, device_name):
@@ -301,5 +301,5 @@ class RestorePoint(object):
         # return exports
 
     def export_all_latest_backups(self, dest_dir=None):
-        device_ids = self.__get_all_device_ids()
+        device_ids = self.get_all_device_ids()
         return self.export_latest_backups(device_ids, dest_dir)
