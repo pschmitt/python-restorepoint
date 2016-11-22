@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='restorepoint',
-    version='1.2.1',
+    version='1.2.2',
     license='GPL3',
     description='Python API wrapper for RestorePoint',
     # long_description=open('README.rst').read(),
