@@ -221,11 +221,11 @@ class RestorePoint(object):
         )
 
     def backup_all_devices(self):
-        device_ids = self.__get_all_device_ids()
+        device_ids = self.get_all_device_ids()
         return self.backup_devices(device_ids)
 
     def backup_all_devices_block(self):
-        device_ids = self.__get_all_device_ids()
+        device_ids = self.get_all_device_ids()
         return self.backup_devices_block(device_ids)
 
     def list_failed_backups(self):
