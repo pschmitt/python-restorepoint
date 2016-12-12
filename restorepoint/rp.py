@@ -42,6 +42,13 @@ def parse_args():
         help='Skip SSL cert verification',
         default=False
     )
+    parser.add_argument(
+        '-e',
+        '--errors-only',
+        action='store_true',
+        help='Print errors only',
+        default=False
+    )
     subparsers = parser.add_subparsers(
         dest='action',
         help='Available commands'
@@ -118,18 +125,21 @@ def determine_device_ids(rp, device_names):
     return device_ids
 
 
-def display_backup_results(rp, result):
+def display_backup_results(rp, result, errors_only=False):
     for dev_id, backup_result in result.iteritems():
         dev_name = rp.get_device(dev_id)['Name']
-        print(
-            '{}: {}'.format(
-                dev_name,
-                'Backup succeeded' if backup_result else 'Backup failed!'
+        if errors_only and not backup_result:
+            print('{}: Backup failed!'.format(dev_name))
+        else:
+            print(
+                '{}: {}'.format(
+                    dev_name,
+                    'Backup succeeded' if backup_result else 'Backup failed!'
+                )
             )
-        )
 
 
-def display_export_results(rp, res):
+def display_export_results(rp, res, errors_only=False):
     device_ids = rp.get_all_device_ids()
     latest_backups = rp.latest_backups(device_ids)
     for backup_id, backup_result in res:
@@ -137,12 +147,16 @@ def display_export_results(rp, res):
         for b in latest_backups:
             if b['ID'] == backup_id:
                 dev_name = rp.get_device(b['DeviceID'])['Name']
-        print(
-            '{}: {}'.format(
-                dev_name,
-                'Export succeeded' if backup_result else 'Export failed!'
+        if errors_only:
+            if backup_result is None:
+                print('{}: Export failed!'.format(dev_name))
+        else:
+            print(
+                '{}: {}'.format(
+                    dev_name,
+                    'Export succeeded' if backup_result else 'Export failed!'
+                )
             )
-        )
 
 
 def main():
@@ -170,7 +184,7 @@ def main():
             # Backup the devices whose IDs could be determined
             res = rp.backup_devices_block(device_ids)
         # Print results
-        display_backup_results(rp, res)
+        display_backup_results(rp, res, args.errors_only)
         # Set the exit code to 1 if at least one backup failed
         exit_code = 0 if all(res.values()) else 1
     elif args.action == 'export':
@@ -197,9 +211,9 @@ def main():
             res = rp.export_latest_backups(device_ids, args.destination)
         # Print results
         if args.force_backup:
-            display_backup_results(rp, backup_res)
+            display_backup_results(rp, backup_res, args.errors_only)
             exit_code = 0 if all(backup_res.values()) else 1
-        display_export_results(rp, res)
+        display_export_results(rp, res, args.errors_only)
     sys.exit(exit_code)
 
 if __name__ == '__main__':
