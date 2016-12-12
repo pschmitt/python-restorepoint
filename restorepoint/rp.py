@@ -128,8 +128,9 @@ def determine_device_ids(rp, device_names):
 def display_backup_results(rp, result, errors_only=False):
     for dev_id, backup_result in result.iteritems():
         dev_name = rp.get_device(dev_id)['Name']
-        if errors_only and not backup_result:
-            print('{}: Backup failed!'.format(dev_name))
+        if errors_only:
+            if not backup_result:
+                print('{}: Backup failed!'.format(dev_name))
         else:
             print(
                 '{}: {}'.format(
