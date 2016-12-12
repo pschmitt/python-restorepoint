@@ -303,3 +303,6 @@ class RestorePoint(object):
     def export_all_latest_backups(self, dest_dir=None):
         device_ids = self.get_all_device_ids()
         return self.export_latest_backups(device_ids, dest_dir)
+
+    def abort_backup_job(self, job_id):
+        return self.__rq(msg='abortjob', params={'jobid': job_id})
