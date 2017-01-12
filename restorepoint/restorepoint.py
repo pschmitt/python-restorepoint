@@ -5,6 +5,7 @@
 https://restorepoint.freshdesk.com/support/solutions/articles/9000098438-api-documentation
 '''
 
+from __future__ import print_function
 from __future__ import unicode_literals
 import pathos.multiprocessing as mp
 import cgi
@@ -194,6 +195,10 @@ class RestorePoint(object):
 
         result = {}
         devices = copy.deepcopy(device_ids)
+        # Wait a second before checking the status of backups, otherwise the
+        # first device's backup result may be falsely set to False (ie. failed
+        # state)
+        time.sleep(1)
         while devices:
             for dev_id in devices:
                 dev_info = self.get_device(dev_id)
