@@ -62,6 +62,11 @@ def parse_args():
         help='Backup one or more devices'
     )
     backup_parser.add_argument(
+        '--exclude',
+        action='append',
+        help='Exclude one or more devices from backup'
+    )
+    backup_parser.add_argument(
         'DEVICE',
         default='all',
         nargs='*',
@@ -93,6 +98,11 @@ def parse_args():
         default=False
     )
     export_parser.add_argument(
+        '--exclude',
+        action='append',
+        help='Exclude one or more devices from export'
+    )
+    export_parser.add_argument(
         'DEVICE',
         default='all',
         nargs='*',
@@ -122,6 +132,16 @@ def determine_device_ids(rp, device_names):
             logger.error('Could not determine device ID of device {}'.format(dev))
         else:
             device_ids.append(dev_id)
+    return device_ids
+
+
+def get_device_ids(rp, device_names, excluded=None):
+    if device_names == ['all']:
+        device_ids = rp.get_all_device_ids()
+    else:
+        device_ids = determine_device_ids(rp, device_names)
+    if excluded:
+        device_ids = [x for x in device_ids if rp.get_device_name_from_id(x) not in excluded]
     return device_ids
 
 
@@ -177,13 +197,12 @@ def main():
         for dev in device_names:
             print(dev)
     elif args.action == 'backup':
-        if args.DEVICE == ['all']:
-            res = rp.backup_all_devices_block()
-        else:
-            # Determine the device IDs
-            device_ids = determine_device_ids(rp, args.DEVICE)
-            # Backup the devices whose IDs could be determined
-            res = rp.backup_devices_block(device_ids)
+        device_ids = get_device_ids(rp, args.DEVICE, args.exclude)
+        if not device_ids:
+            print('No devices selected for backup', file=sys.stderr)
+            sys.exit(4)
+        # Backup the devices whose IDs could be determined
+        res = rp.backup_devices_block(device_ids)
         # Print results
         display_backup_results(rp, res, args.errors_only)
         # Set the exit code to 1 if at least one backup failed
@@ -198,18 +217,15 @@ def main():
             sys.exit(3)
         elif args.clean:
             empty_dir(args.destination)
-        # Export backups
-        if args.DEVICE == ['all']:
-            if args.force_backup:
-                backup_res = rp.backup_all_devices_block()
-            res = rp.export_all_latest_backups(args.destination)
-        else:
-            # Determine the device IDs
-            device_ids = determine_device_ids(rp, args.DEVICE)
-            if args.force_backup:
-                backup_res = rp.backup_devices_block(device_ids)
-            # Export the devices whose IDs could be determined
-            res = rp.export_latest_backups(device_ids, args.destination)
+        device_ids = get_device_ids(rp, args.DEVICE, args.exclude)
+        if not device_ids:
+            print('No devices selected for export', file=sys.stderr)
+            sys.exit(4)
+        # Optionally force a new backup
+        if args.force_backup:
+            backup_res = rp.backup_devices_block(device_ids)
+        # Export the devices whose IDs could be determined
+        res = rp.export_latest_backups(device_ids, args.destination)
         # Print results
         if args.force_backup:
             display_backup_results(rp, backup_res, args.errors_only)
