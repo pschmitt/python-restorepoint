@@ -165,6 +165,11 @@ class RestorePoint(object):
             if dev['Name'] == device_name:
                 return dev['ID']
 
+    def get_device_name_from_id(self, device_id):
+        for dev in self.list_devices():
+            if dev['ID'] == device_id:
+                return dev['Name']
+
     def get_device_backups(self, device_id):
         return self.__rq(
             msg='devicebackups',
