@@ -114,6 +114,21 @@ def parse_args():
         nargs='*',
         help='Optinal device name to export (Default: all)'
     )
+    prune_parser = subparsers.add_parser(
+        'prune',
+        help='Prune the latest backup of one or more devices'
+    )
+    prune_parser.add_argument(
+        '--exclude',
+        action='append',
+        help='Exclude one or more devices from prune'
+    )
+    prune_parser.add_argument(
+        'DEVICE',
+        default='all',
+        nargs='*',
+        help='Optinal device name to prune (Default: all)'
+    )
     return parser.parse_args()
 
 
@@ -142,7 +157,7 @@ def determine_device_ids(rp, device_names):
 
 
 def get_device_ids(rp, device_names, excluded=None):
-    if device_names == ['all']:
+    if device_names == ['all'] or device_names == 'all':
         device_ids = rp.get_all_device_ids()
     else:
         device_ids = determine_device_ids(rp, device_names)
@@ -240,6 +255,10 @@ def main():
         if args.prune:
             for dev_id in device_ids:
                 rp.prune_backups(dev_id)
+    elif args.action == 'prune':
+        device_ids = get_device_ids(rp, args.DEVICE, args.exclude)
+        for dev_id in device_ids:
+            rp.prune_backups(dev_id)
     sys.exit(exit_code)
 
 if __name__ == '__main__':
