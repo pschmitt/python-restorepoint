@@ -98,6 +98,12 @@ def parse_args():
         default=False
     )
     export_parser.add_argument(
+        '--prune',
+        help='Prune backups (keep 10 most recent only)',
+        action='store_true',
+        default=False
+    )
+    export_parser.add_argument(
         '--exclude',
         action='append',
         help='Exclude one or more devices from export'
@@ -231,6 +237,9 @@ def main():
             display_backup_results(rp, backup_res, args.errors_only)
             exit_code = 0 if all(backup_res.values()) else 1
         display_export_results(rp, res, args.errors_only)
+        if args.prune:
+            for dev_id in device_ids:
+                rp.prune_backups(dev_id)
     sys.exit(exit_code)
 
 if __name__ == '__main__':

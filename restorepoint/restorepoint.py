@@ -7,6 +7,7 @@ https://restorepoint.freshdesk.com/support/solutions/articles/9000098438-api-doc
 
 from __future__ import print_function
 from __future__ import unicode_literals
+from dateutil.parser import parse
 import pathos.multiprocessing as mp
 import cgi
 import copy
@@ -316,3 +317,23 @@ class RestorePoint(object):
 
     def abort_backup_job(self, job_id):
         return self.__rq(msg='abortjob', params={'jobid': job_id})
+
+    def delete_backups(self, backup_ids):
+        logger.info(
+            'Delete backups: {}'.format(
+                ', '.join([str(x) for x in backup_ids])
+            )
+        )
+        return self.__rq(msg='deletebackupids', params={'ids': backup_ids})
+
+    def prune_backups(self, device_id, keep=10):
+        backups = self.get_device_backups(device_id)
+        backups_sorted = sorted(
+            backups,
+            key=lambda x: parse(x['Dt']),
+            reverse=True
+        )
+        backups_keep = backups_sorted[0:keep]
+        backups_prune = [x for x in backups_sorted if x not in backups_keep]
+        logger.debug('Pruning {} backups'.format(len(backups_prune)))
+        return self.delete_backups([x['ID'] for x in backups_prune])

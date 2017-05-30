@@ -3,4 +3,5 @@ multiprocess==0.70.4
 pathos==0.2.0
 pox==0.2.2
 ppft==1.6.4.6
+python-dateutil==2.6.0
 requests==2.11.1
