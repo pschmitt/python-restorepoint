@@ -1,5 +1,5 @@
 dill==0.2.6
-multiprocess==0.70.4
+multiprocess==0.70.5
 pathos==0.2.0
 pox==0.2.2
 ppft==1.6.4.6
