@@ -1,7 +1,7 @@
-dill==0.2.5
-multiprocess==0.70.4
+dill==0.2.6
+multiprocess==0.70.5
 pathos==0.2.0
-pox==0.2.2
-ppft==1.6.4.6
+pox==0.2.3
+ppft==1.6.4.7.1
 python-dateutil==2.6.0
-requests==2.11.1
+requests==2.17.3
