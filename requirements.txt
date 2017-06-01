@@ -1,7 +1,7 @@
 dill==0.2.6
 multiprocess==0.70.5
 pathos==0.2.0
-pox==0.2.2
+pox==0.2.3
 ppft==1.6.4.6
 python-dateutil==2.6.0
 requests==2.11.1
