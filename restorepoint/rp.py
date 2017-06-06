@@ -124,6 +124,12 @@ def parse_args():
         help='Exclude one or more devices from prune'
     )
     prune_parser.add_argument(
+        '--keep',
+        type=int,
+        default=10,
+        help='Number of configurations to keep'
+    )
+    prune_parser.add_argument(
         'DEVICE',
         default='all',
         nargs='*',
@@ -258,7 +264,7 @@ def main():
     elif args.action == 'prune':
         device_ids = get_device_ids(rp, args.DEVICE, args.exclude)
         for dev_id in device_ids:
-            rp.prune_backups(dev_id)
+            rp.prune_backups(dev_id, keep=args.keep)
     sys.exit(exit_code)
 
 if __name__ == '__main__':
