@@ -20,13 +20,20 @@ import time
 import urllib
 
 
-logging.basicConfig(level=logging.WARNING)
+# logging.basicConfig(level=logging.WARNING)
 # logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # Silence requests warnings
 requests.packages.urllib3.disable_warnings()
 logging.getLogger('requests').setLevel(logging.WARNING)
+
+
+class PermissionException(Exception):
+    pass
+
+class GenericException(Exception):
+    pass
 
 
 class RestorePoint(object):
@@ -65,7 +72,15 @@ class RestorePoint(object):
         j = r.json()
         logger.debug('JSON Response: {}'.format(j))
         if 'msg' in j:
-            return j['msg']
+            msg = j.get('msg', None)
+            if msg == 'Error':
+                error = j.get('error', None)
+                logger.error('Request errored out: {}'.format(error))
+                if error in ['Unauthorised', 'Unauthorized']:
+                    raise PermissionException()
+                else:
+                    raise GenericException(error)
+            return msg
         else:
             logger.error('No key named "msg" found in JSON response')
             return j
