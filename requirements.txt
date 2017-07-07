@@ -1,4 +1,4 @@
-dill==0.2.6
+dill==0.2.7
 multiprocess==0.70.5
 pathos==0.2.0
 pox==0.2.3
