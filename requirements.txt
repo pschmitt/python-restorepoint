@@ -1,6 +1,6 @@
 dill==0.2.7.1
 multiprocess==0.70.5
-pathos==0.2.1
+pathos==0.2.2
 pox==0.2.3
 ppft==1.6.4.7.1
 python-dateutil==2.7.3
