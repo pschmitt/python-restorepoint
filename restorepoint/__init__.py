@@ -1,1 +1,1 @@
-from restorepoint import RestorePoint
+from .restorepoint import RestorePoint
