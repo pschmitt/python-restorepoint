@@ -43,6 +43,13 @@ def parse_args():
         default=False
     )
     parser.add_argument(
+        '-s',
+        '--sleep',
+        type=int,
+        help='Sleep interval between device backups',
+        default=2
+    )
+    parser.add_argument(
         '-e',
         '--errors-only',
         action='store_true',
@@ -229,7 +236,7 @@ def main():
             print('No devices selected for backup', file=sys.stderr)
             sys.exit(4)
         # Backup the devices whose IDs could be determined
-        res = rp.backup_devices_block(device_ids)
+        res = rp.backup_devices_block(device_ids, sleep_interval=args.sleep)
         # Print results
         display_backup_results(rp, res, args.errors_only)
         # Set the exit code to 1 if at least one backup failed
@@ -250,7 +257,8 @@ def main():
             sys.exit(4)
         # Optionally force a new backup
         if args.force_backup:
-            backup_res = rp.backup_devices_block(device_ids)
+            backup_res = rp.backup_devices_block(device_ids,
+                                                 sleep_interval=args.sleep)
         # Export the devices whose IDs could be determined
         res = rp.export_latest_backups(device_ids, args.destination)
         # Print results
@@ -266,6 +274,7 @@ def main():
         for dev_id in device_ids:
             rp.prune_backups(dev_id, keep=args.keep)
     sys.exit(exit_code)
+
 
 if __name__ == '__main__':
     main()
