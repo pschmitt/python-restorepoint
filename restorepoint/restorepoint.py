@@ -94,7 +94,7 @@ class RestorePoint(object):
         return self.__request(data=data)
 
     def list_devices(self):
-        return self.__list('devices')
+        return self.__list('devices').get('Rows')
 
     def list_devices_status(self):
         return self.__list('devicesstatus')
