@@ -7,7 +7,7 @@ dill==0.2.8.2
 dis3==0.1.2
 enum34==1.1.6
 future==0.16.0
-idna==2.7
+idna==2.8
 ipython==5.8.0
 ipython-genutils==0.2.0
 macholib==1.11
