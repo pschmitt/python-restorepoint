@@ -13,7 +13,7 @@ ipython-genutils==0.2.0
 macholib==1.11
 multiprocess==0.70.6.1
 pathlib2==2.3.2
-pathos==0.2.2.1
+pathos==0.2.3
 pefile==2018.8.8
 pexpect==4.6.0
 pickleshare==0.7.5
