@@ -18,6 +18,6 @@ pefile==2018.8.8
 pexpect==4.6.0
 pickleshare==0.7.5
 pox==0.2.4
-ppft==1.6.4.7.1
+ppft==1.6.4.9
 python-dateutil==2.7.5
 requests==2.21.0
