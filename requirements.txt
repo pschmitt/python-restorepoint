@@ -14,7 +14,7 @@ macholib==1.11
 multiprocess==0.70.7
 pathlib2==2.3.2
 pathos==0.2.3
-pefile==2018.8.8
+pefile==2019.4.14
 pexpect==4.7.0
 pickleshare==0.7.5
 pox==0.2.4
