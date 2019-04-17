@@ -268,7 +268,11 @@ def main():
         display_export_results(rp, res, args.errors_only)
         if args.prune:
             for dev_id in device_ids:
-                rp.prune_backups(dev_id)
+                try:
+                    rp.prune_backups(dev_id)
+                except Exception as exc:
+                    print('Something went wrong while pruning backups of'
+                          ' {}: {}'.format(dev_id, exc))
     elif args.action == 'prune':
         device_ids = get_device_ids(rp, args.DEVICE, args.exclude)
         for dev_id in device_ids:
