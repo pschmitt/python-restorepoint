@@ -32,6 +32,7 @@ logging.getLogger('requests').setLevel(logging.WARNING)
 class PermissionException(Exception):
     pass
 
+
 class GenericException(Exception):
     pass
 
@@ -351,4 +352,5 @@ class RestorePoint(object):
         backups_keep = backups_sorted[0:keep]
         backups_prune = [x for x in backups_sorted if x not in backups_keep]
         logger.debug('Pruning {} backups'.format(len(backups_prune)))
-        return self.delete_backups([x['ID'] for x in backups_prune])
+        if backups_prune:
+            return self.delete_backups([x['ID'] for x in backups_prune])
