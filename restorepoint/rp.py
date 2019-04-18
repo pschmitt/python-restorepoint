@@ -180,7 +180,7 @@ def get_device_ids(rp, device_names, excluded=None):
 
 
 def display_backup_results(rp, result, errors_only=False):
-    for dev_id, backup_result in result.iteritems():
+    for dev_id, backup_result in result.items():
         dev_name = rp.get_device(dev_id)['Name']
         if errors_only:
             if not backup_result:

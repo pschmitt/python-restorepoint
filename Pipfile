@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+dill= "*"
+multiprocess= "*"
+pathos= "*"
+pox= "*"
+ppft= "*"
+python-dateutil= "*"
+requests= "*"
+pip= "*"
+
+[dev-packages]
+ipython = "*"
+pyinstaller = "*"
+
+[requires]
+python_version = "3.7"

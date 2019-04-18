@@ -17,7 +17,7 @@ import logging
 import os
 import requests
 import time
-import urllib
+import urllib.parse
 
 
 # logging.basicConfig(level=logging.WARNING)
@@ -273,7 +273,7 @@ class RestorePoint(object):
         }
         url = '{}/data?data={}'.format(
             self.API,
-            urllib.quote(json.dumps(data), safe='{}:,[]')
+            urllib.parse.quote(json.dumps(data), safe='{}:,[]')
         )
         logger.info('GET Data: {}'.format(data))
 
