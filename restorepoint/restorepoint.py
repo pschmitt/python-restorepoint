@@ -29,6 +29,10 @@ requests.packages.urllib3.disable_warnings()
 logging.getLogger('requests').setLevel(logging.WARNING)
 
 
+class LoginException(Exception):
+    pass
+
+
 class PermissionException(Exception):
     pass
 
@@ -58,7 +62,10 @@ class RestorePoint(object):
         }
         r = requests.post(url=url, data=data, verify=self.verify)
         r.raise_for_status()
-        return r.history[0].cookies
+        try:
+            return r.history[0].cookies
+        except Exception as exc:
+            raise LoginException(exc)
 
     def __request(self, data):
         url = '{}/data'.format(self.API)
