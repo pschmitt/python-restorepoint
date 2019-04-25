@@ -101,8 +101,11 @@ class RestorePoint(object):
         data = {'msg': 'list{}'.format(object_type), 'params': params}
         return self.__request(data=data)
 
-    def list_devices(self):
-        return self.__list('devices').get('Rows')
+    def list_devices(self, ignore_disabled=False):
+        devices = self.__list('devices').get('Rows')
+        if ignore_disabled:
+            return [x for x in devices if x['Disabled'] == 'No']
+        return devices
 
     def list_devices_status(self):
         return self.__list('devicesstatus')
@@ -181,8 +184,12 @@ class RestorePoint(object):
             params={'value': password}
         )
 
-    def get_all_device_ids(self):
-        return [x['ID'] for x in self.list_devices()]
+    def get_all_device_ids(self, ignore_disabled=False):
+        if ignore_disabled:
+            return [x['ID'] for x in self.list_devices()
+                    if x['Disabled'] == 'No']
+        else:
+            return [x['ID'] for x in self.list_devices()]
 
     def get_device_id_from_name(self, device_name):
         for dev in self.list_devices():

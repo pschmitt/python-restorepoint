@@ -91,6 +91,13 @@ def parse_args():
         required=False
     )
     export_parser.add_argument(
+        '-i',
+        '--ignore-disabled',
+        help='Ignore disabled devices',
+        action='store_true',
+        default=True
+    )
+    export_parser.add_argument(
         '-f',
         '--force-backup',
         help='Force a backup before exporting it',
@@ -169,9 +176,9 @@ def determine_device_ids(rp, device_names):
     return device_ids
 
 
-def get_device_ids(rp, device_names, excluded=None):
+def get_device_ids(rp, device_names, excluded=None, ignore_disabled=False):
     if device_names == ['all'] or device_names == 'all':
-        device_ids = rp.get_all_device_ids()
+        device_ids = rp.get_all_device_ids(ignore_disabled=ignore_disabled)
     else:
         device_ids = determine_device_ids(rp, device_names)
     if excluded:
