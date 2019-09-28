@@ -4,7 +4,7 @@ chardet==3.0.4
 dill==0.2.9
 idna==2.8
 multiprocess==0.70.7
-pathos==0.2.4
+pathos==0.2.5
 pox==0.2.5
 ppft==1.6.4.9
 python-dateutil==2.8.0
