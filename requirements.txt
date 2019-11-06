@@ -9,5 +9,5 @@ pox==0.2.5
 ppft==1.6.4.9
 python-dateutil==2.8.0
 requests==2.22.0
-six==1.12.0
+six==1.13.0
 urllib3==1.25.6
