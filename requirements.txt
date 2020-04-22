@@ -10,4 +10,4 @@ ppft==1.6.4.9
 python-dateutil==2.8.1
 requests==2.23.0
 six==1.14.0
-urllib3==1.25.8
+urllib3==1.25.9
