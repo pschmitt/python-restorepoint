@@ -68,10 +68,10 @@
         },
         "pox": {
             "hashes": [
-                "sha256:2b53fbdf02596240483dc2cb94f94cc21252ad1b1858c7b1c151afeec9022cc8"
+                "sha256:621f3a912531d0c5c71f7d5fd4815b15bf5d0db5b4cea352df14f2ff6bc7c615"
             ],
             "index": "pypi",
-            "version": "==0.2.5"
+            "version": "==0.2.8"
         },
         "ppft": {
             "hashes": [
