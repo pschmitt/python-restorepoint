@@ -75,10 +75,10 @@
         },
         "ppft": {
             "hashes": [
-                "sha256:5537b00afb7b247da0f59cc57ee5680178be61c8b2e21b5a0672b70a3d247791"
+                "sha256:cd1e39129fc9cbd4a877b1ff4fc5018051183c11bc9c9c0922efad80c57174f6"
             ],
             "index": "pypi",
-            "version": "==1.6.4.9"
+            "version": "==1.6.6.2"
         },
         "python-dateutil": {
             "hashes": [
