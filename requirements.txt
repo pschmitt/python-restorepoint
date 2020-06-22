@@ -7,7 +7,7 @@ multiprocess==0.70.7
 pathos==0.2.3
 pox==0.2.5
 ppft==1.6.6.2
-python-dateutil==2.8.0
+python-dateutil==2.8.1
 requests==2.24.0
 six==1.15.0
 urllib3==1.25.9
