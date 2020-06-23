@@ -32,10 +32,10 @@
         },
         "dill": {
             "hashes": [
-                "sha256:f6d6046f9f9195206063dd0415dff185ad593d6ee8b0e67f12597c0f4df4986f"
+                "sha256:6e12da0d8e49c220e8d6e97ee8882002e624f1160289ce85ec2cc0a5246b3a2e"
             ],
             "index": "pypi",
-            "version": "==0.2.9"
+            "version": "==0.3.2"
         },
         "idna": {
             "hashes": [
