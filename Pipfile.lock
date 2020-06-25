@@ -55,10 +55,10 @@
         },
         "pathos": {
             "hashes": [
-                "sha256:954c5b0a8b257c375e35d311c65fa62a210a3d65269195557de38418ac9f61f9"
+                "sha256:51b48e54870e4f83a262e49b6369116ab2ecc5a217569a84c7ab726e27b1bc10"
             ],
             "index": "pypi",
-            "version": "==0.2.3"
+            "version": "==0.2.6"
         },
         "pox": {
             "hashes": [
