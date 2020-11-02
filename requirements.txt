@@ -6,7 +6,7 @@ idna==2.10
 multiprocess==0.70.10
 pathos==0.2.6
 pox==0.2.9
-ppft==1.6.6.2
+ppft==1.6.6.3
 python-dateutil==2.8.1
 requests==2.24.0
 six==1.15.0
