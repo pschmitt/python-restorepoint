@@ -47,12 +47,16 @@
         },
         "multiprocess": {
             "hashes": [
-                "sha256:81f388527a0c8766e94fe084fd8a408da5045a9fe7b28e199f684a796f3c6bf8",
-                "sha256:879ee48882bf7959102010058f30419d72abc90035de70b7259a386dc8b1946a",
-                "sha256:9e604ac3ff7d6aa7da8306e7dd3a76a8b6ba83f5a8a2d8590b2edd1468df6479"
+                "sha256:0626f0c1792c47eff36350cded6f02b602b78b812dbaf8b032a05d4b4cbcb886",
+                "sha256:404641ffcce86658f914fc29efc23db096ccd02a1a29efd2e7fad7b54b98f08b",
+                "sha256:44b262025dbca103d4466bc4061dbb7e42003efbfbf3557ea1e33d8e37d5a875",
+                "sha256:4a4b00643a6bcdd36452c8826371075234e8d4fb0310bdeb8523d978de3b6cc1",
+                "sha256:b7337d6be39cfa9f5a3c09d4293cfccd8fa171565a6476971e1353b5aa46f58e",
+                "sha256:d831d3bebfa681475fa67c434c09268f29191c41b54dc752b5a948456e083854",
+                "sha256:e75f02a8dc3707207d3356e0d272933a718654b54d792fc1f7b2925b5c0e120d"
             ],
             "index": "pypi",
-            "version": "==0.70.10"
+            "version": "==0.70.11"
         },
         "pathos": {
             "hashes": [
