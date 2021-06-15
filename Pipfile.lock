@@ -74,11 +74,11 @@
         },
         "pox": {
             "hashes": [
-                "sha256:013eb9e01e9a0670da881894925d73b2d4b32343471b22fa8c41e19e8b3f6367",
-                "sha256:f08b5453edf94fd6fdb28e043658cdd6151d5fd8384066a24fad8d4bd7e637c0"
+                "sha256:97a389cd1c6ed44dc6b934659f315d43336f7bde946a7977e770fd7e350a5395",
+                "sha256:cb968350b186466bb4905a21084587ec3aa6fd7aa0ef55d416ee0d523e2abe31"
             ],
             "index": "pypi",
-            "version": "==0.2.9"
+            "version": "==0.3.0"
         },
         "ppft": {
             "hashes": [
