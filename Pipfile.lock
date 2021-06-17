@@ -68,11 +68,11 @@
         },
         "pathos": {
             "hashes": [
-                "sha256:13e40b6d3af87b3f9fa2e03a116345fe8e10942ed33fe371c76a4d5779b20e02",
-                "sha256:383449988a85f18943610f480f5f3c2077de9e0a2bfa3833c9b6346fe7dacc1b"
+                "sha256:1f0f27a90f7ab66c423ba796529000fde9360d17b2d8e50097641ff405fc6f15",
+                "sha256:789ae53487e5f9393fcc2b9703188a1b97f20206c429654134a7152f591bafe7"
             ],
             "index": "pypi",
-            "version": "==0.2.7"
+            "version": "==0.2.8"
         },
         "pox": {
             "hashes": [
