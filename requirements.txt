@@ -6,10 +6,10 @@
 #
 
 -i https://pypi.org/simple/
-certifi==2021.5.30
-charset-normalizer==2.0.6; python_version >= '3'
+certifi==2021.10.8
+charset-normalizer==2.0.7; python_version >= '3'
 dill==0.3.4
-idna==3.2; python_version >= '3'
+idna==3.3; python_version >= '3'
 multiprocess==0.70.12.2
 pathos==0.2.8
 pox==0.3.0
