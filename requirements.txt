@@ -7,7 +7,7 @@
 
 -i https://pypi.org/simple/
 certifi==2021.10.8
-charset-normalizer==2.0.11; python_version >= '3'
+charset-normalizer==2.0.12; python_version >= '3'
 dill==0.3.4
 idna==3.3; python_version >= '3'
 multiprocess==0.70.12.2
