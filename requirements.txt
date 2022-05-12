@@ -12,7 +12,7 @@ dill==0.3.4
 idna==3.3; python_version >= '3'
 multiprocess==0.70.12.2
 pathos==0.2.8
-pip==22.0.4
+pip==22.1
 pox==0.3.0
 ppft==1.6.6.4
 python-dateutil==2.8.2
