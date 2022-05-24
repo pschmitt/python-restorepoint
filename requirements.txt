@@ -8,11 +8,11 @@
 -i https://pypi.org/simple/
 certifi==2021.10.8
 charset-normalizer==2.0.12; python_version >= '3'
-dill==0.3.4
+dill==0.3.5.1
 idna==3.3; python_version >= '3'
 multiprocess==0.70.12.2
 pathos==0.2.8
-pip==22.1
+pip==22.1.1
 pox==0.3.0
 ppft==1.6.6.4
 python-dateutil==2.8.2
